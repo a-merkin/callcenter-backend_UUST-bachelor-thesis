@@ -1,20 +1,26 @@
-import { SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Logger } from '@nestjs/common';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway()
 export class ChatGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
+  private logger: Logger = new Logger('ChatGateway');
 
-  handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+  afterInit(server: Server) {
+    this.logger.log('Init');
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    this.logger.log(`Client connected: ${client.id}`);
   }
 
   handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
+    this.logger.log(`Client disconnected: ${client.id}`);
   }
 
-  @SubscribeMessage('message')
-  handleMessage(client: Socket, payload: { sender: string; message: string, incidentId: string }): void {
-    this.server.emit('message', payload);
+  @SubscribeMessage('msgToServer')
+  handleMessage(client: Socket, payload: any): void {
+    this.server.emit('msgToClient', payload);
   }
 }
