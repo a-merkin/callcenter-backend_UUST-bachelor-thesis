@@ -33,4 +33,47 @@ export class IncidentsService {
   async remove(id: number): Promise<void> {
     await this.incidentsRepository.delete(id);
   }
+
+  async createIncidentFromCall(phone: string, token: string, tfop: string, menu_item: number) {
+    const reason = this.getReasonByMenuItem(menu_item);
+    const newIncident = this.incidentsRepository.create({
+      phone,
+      token,
+      tfop,
+      reason,
+      status: 'new',
+      source: 'call',
+    });
+
+    return await this.incidentsRepository.save(newIncident);
+  }
+
+  getReasonByMenuItem(menu_item: number): string {
+    switch (menu_item) {
+      case 1:
+        return 'Учебный отдел';
+      case 2:
+        return 'Приемная комиссия';
+      case 3:
+        return 'Канцелярия';
+      case 4:
+        return 'Бухгалтерия';
+      case 5:
+        return 'Отдел кадров';
+      case 6:
+        return 'Библиотека';
+      case 7:
+        return 'IT-отдел';
+      case 8:
+        return 'Студенческий совет';
+      case 9:
+        return 'Научный отдел';
+      case 10:
+        return 'Отдел международных связей';
+      case 11:
+        return 'Отдел безопасности';
+      default:
+        return 'Неизвестная категория';
+    }
+  }
 }

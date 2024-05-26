@@ -45,3 +45,14 @@ export class IncidentsController {
     return this.incidentsService.remove(+id);
   }
 }
+
+@Controller('freeswitch')
+export class IncidentController {
+  constructor(private readonly incidentService: IncidentsService) {}
+
+  @Post('active_incident_by_phone')
+  async createIncident(@Body() body: any) {
+    const { phone, token, tfop, menu_item } = body;
+    return this.incidentService.createIncidentFromCall(phone, token, tfop, menu_item);
+  }
+}

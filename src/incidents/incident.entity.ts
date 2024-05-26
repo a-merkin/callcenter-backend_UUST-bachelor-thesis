@@ -1,21 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { User } from '../users/user.entity';
-import { Operator } from '../operators/operator.entity';
-import { Chat } from '../chat/chat.entity';
+// entities/incident.entity.ts
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('incident')
+@Entity()
 export class Incident {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  UserID: number;
-
-  @Column()
-  IncidentsID: number;
-
   @Column({ nullable: true })
-  FIO: string;
+  fio: string;
 
   @Column({ nullable: true })
   group: string;
@@ -29,27 +21,24 @@ export class Incident {
   @Column()
   reason: string;
 
-  @Column({ type: 'time' })
+  @Column()
   time: string;
 
-  @Column({ type: 'date' })
+  @Column()
   date: string;
 
   @Column()
   source: string;
 
-  @Column({ nullable: true })
-  phone: number;
+  @Column()
+  phone: string;
 
-  @Column({ nullable: true })
+  @Column()
   status: string;
 
-  @ManyToOne(() => User, user => user.incidents)
-  user: User;
+  @Column({ nullable: true })
+  token: string;
 
-  @ManyToOne(() => Operator, operator => operator.incidents)
-  operator: Operator;
-
-  @ManyToOne(() => Chat, chat => chat.incidents)
-  chat: Chat;
+  @Column({ nullable: true })
+  tfop: string;
 }
